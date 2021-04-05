@@ -4,18 +4,29 @@
 
 namespace dw = deepworks;
 
+struct SimpleModelTest: public ::testing::Test {
+    SimpleModelTest() : model(buildModel()) {
+    }
+
+    dw::Model buildModel() {
+        in  = dw::Placeholder(dw::Shape{batch_size, 100});
+        out = dw::Linear(50, "linear_0")(in);
+        out = dw::ReLU("relu_1")(out);
+        out = dw::Linear(10, "linear_2")(out);
+        out = dw::Softmax("probs")(out);
+
+        return {in, out};
+    }
+
+    dw::Placeholder in;
+    dw::Placeholder out;
+    dw::Model       model;
+
+    int batch_size = 8;
+};
+
 // FIXME: There is should be more tests !!!
-TEST(Model, SimpleModel) {
-    // NB: Define our MNIST winner.
-    dw::Placeholder in(dw::Shape{-1, 100});
-
-    auto out = dw::Linear(50, "linear_0")(in);
-    out = dw::ReLU("relu_1")(out);
-    out = dw::Linear(10, "linear_2")(out);
-    out = dw::Softmax("probs")(out);
-    
-    dw::Model model(in, out);
-
+TEST_F(SimpleModelTest, Create) {
     // NB: (bias + weight) * 2
     EXPECT_EQ(4u, model.params().size());
 
