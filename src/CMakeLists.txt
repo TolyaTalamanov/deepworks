@@ -10,6 +10,7 @@ set(SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/model/layer_info.cpp
     ${CMAKE_CURRENT_LIST_DIR}/model/graphbuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/model/parameter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/model/serialization.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/metrics.cpp
 

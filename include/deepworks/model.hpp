@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <ostream>
 
 #include <deepworks/placeholder.hpp>
 #include <deepworks/layer.hpp>
@@ -37,6 +38,8 @@ public:
                   const std::vector<Tensor>& grad_outputs);
 
 private:
+    friend std::ostream& operator<<(std::ostream& os, const Model& model);
+
     struct Impl;
     std::shared_ptr<Impl> m_impl;
 };

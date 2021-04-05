@@ -10,17 +10,46 @@
 
 namespace deepworks {
 
+enum AttrType {
+    INT,
+    FLOAT
+};
+
+enum AttrShape {
+    VALUE,
+    VECTOR
+};
+
+template <typename T>
+struct AttrTypeTraits;
+
+template <> struct AttrTypeTraits<int>   { static constexpr const AttrType type = AttrType::INT  ; };
+template <> struct AttrTypeTraits<float> { static constexpr const AttrType type = AttrType::FLOAT; };
+
+template <typename T>
+struct AttrShapeTraits { static constexpr const AttrShape shape = AttrShape::VALUE; };
+
+template <typename T>
+struct AttrShapeTraits<std::vector<T>> { static constexpr const AttrShape shape = AttrShape::VECTOR; };
+
 class Attribute {
 public:
     Attribute() = default;
 
     template <typename T>
-    Attribute(T&& value) : m_value(std::forward<T>(value)) { }
+    Attribute(T&& value)
+        : m_value(std::forward<T>(value)),
+          type (AttrTypeTraits <typename std::decay<T>::type>::type),
+          shape(AttrShapeTraits<typename std::decay<T>::type>::shape) {
+    }
 
     template <typename T>
     const T& get() const {
         return *std::any_cast<T>(&m_value);
     }
+
+    AttrType  type;
+    AttrShape shape;
 
 private:
     std::any m_value;

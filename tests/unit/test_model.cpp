@@ -90,3 +90,7 @@ TEST_F(SimpleModelTest, Create) {
     // NB: Finnaly let's get the nonexistent layer.
     EXPECT_ANY_THROW(model.getLayer("linear_3"));
 }
+
+TEST_F(SimpleModelTest, Serialization) {
+    dw::serialize(model, "model.bin");
+}
